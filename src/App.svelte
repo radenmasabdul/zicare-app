@@ -1,9 +1,8 @@
 <script>
+  import Login from "./pages/auth/Login.svelte";
 </script>
 
-<main>
-  <h1 class="text-3xl font-bold underline text-red-600">Hello world!</h1>
-</main>
+<Login />
 
 <style>
 </style>
