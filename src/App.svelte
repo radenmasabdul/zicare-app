@@ -1,9 +1,8 @@
 <script>
-  // import Login from "./pages/auth/Login.svelte";
-  import Layout from "./layouts/Layout.svelte";
+  import Router from "svelte-spa-router";
+  import routes from "./routes/router";
 </script>
 
-<!-- <Login /> -->
-<Layout />
+<Router {routes} useHash={true} />
 
 <style></style>

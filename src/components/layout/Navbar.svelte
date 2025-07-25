@@ -1,5 +1,6 @@
 <script>
   import { Menu } from "@lucide/svelte";
+  import { push } from "svelte-spa-router";
 
   export let toggleDrawer;
   let activeItem = "Profile";
@@ -8,6 +9,14 @@
 
   const setActive = (item) => {
     activeItem = item;
+
+    if (item === "Logout") {
+      // hapus token (kalau kamu pakai token login)
+      localStorage.removeItem("token");
+
+      // redirect ke login
+      push("/login");
+    }
   };
 </script>
 

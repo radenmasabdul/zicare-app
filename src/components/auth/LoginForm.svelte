@@ -1,4 +1,6 @@
 <script>
+  import { push } from "svelte-spa-router";
+
   import { Eye, EyeOff, Mail, Lock, LogIn } from "@lucide/svelte";
   import wallpaper from "../../assets/bg.jpg";
 
@@ -13,6 +15,16 @@
     console.log("klik login");
     e.preventDefault();
     isLoading = true;
+
+    // contoh validasi dummy
+    if (email === "abdul.tamsis@gmail.com" && password === "password") {
+      // simpan token atau status login jika diperlukan
+      push("/dashboard"); // redirect ke layout utama
+    } else {
+      alert("Email atau password salah");
+    }
+
+    isLoading = false;
   };
 </script>
 

@@ -1,12 +1,15 @@
 <script>
+  import { push } from "svelte-spa-router";
+
   export let sidebarItems = [];
   export let isDrawerOpen = false;
   export let toggleDrawer;
 
   let activeItem = sidebarItems[0]?.label || "";
 
-  const handleClick = (label) => {
-    activeItem = label;
+  const handleClick = (item) => {
+    activeItem = item.label;
+    push(item.path);
   };
 </script>
 
@@ -45,7 +48,7 @@
                   ? "bg-purple-500 text-white font-semibold"
                   : "hover:bg-purple-50 text-gray-800"
               }`}
-            on:click={() => handleClick(item.label)}
+            on:click={() => handleClick(item)}
           >
             <svelte:component this={item.icon} class="w-5 h-5" />
             <span>{item.label}</span>
