@@ -1,14 +1,12 @@
 <script>
-  import { push } from "svelte-spa-router";
+  import { push, location } from "svelte-spa-router";
 
   export let sidebarItems = [];
   export let isDrawerOpen = false;
-  export let toggleDrawer;
 
-  let activeItem = sidebarItems[0]?.label || "";
+  $: currentPath = $location;
 
   const handleClick = (item) => {
-    activeItem = item.label;
     push(item.path);
   };
 </script>
@@ -26,14 +24,6 @@
   </div>
 
   <div class="drawer-side">
-    <div
-      class="drawer-overlay"
-      role="button"
-      tabindex="0"
-      on:click={toggleDrawer}
-      on:keydown={(e) => e.key === "Enter" && toggleDrawer()}
-    ></div>
-
     <ul class="menu p-4 w-80 min-h-full bg-white">
       <h1 class="text-2xl font-bold text-center my-5 text-purple-800">
         ZiCare App
@@ -44,7 +34,7 @@
           <button
             class={`flex items-center gap-3 px-4 py-2 rounded-lg w-full text-left transition
               ${
-                activeItem === item.label
+                currentPath.startsWith(item.path)
                   ? "bg-purple-500 text-white font-semibold"
                   : "hover:bg-purple-50 text-gray-800"
               }`}
