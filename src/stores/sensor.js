@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createQuery, createMutation } from '@tanstack/svelte-query';
 import { queryClient } from '../utils/helpers/queryClient.js';
 import {
@@ -23,28 +24,33 @@ export const sensorByIdQuery = (id) =>
         enabled: !!id,
     });
 
-export const locationSensorQuery = createQuery({
-    queryKey: ['sensor-locations'],
-    queryFn: getLocationSensor,
-});
+export const locationSensorQuery = () =>
+    createQuery({
+        queryKey: ['sensor-locations'],
+        queryFn: getLocationSensor,
+    });
 
-export const parameterSensorQuery = createQuery({
-    queryKey: ['sensor-parameters'],
-    queryFn: getLocationParameter,
-});
+export const parameterSensorQuery = () =>
+    createQuery({
+        queryKey: ['sensor-parameters'],
+        queryFn: getLocationParameter,
+    });
 
-export const createSensorMutation = createMutation({
-    mutationFn: createSensor,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
-});
+export const createSensorMutation = () =>
+    createMutation({
+        mutationFn: createSensor,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
+    });
 
-export const updateSensorMutation = createMutation({
-    // @ts-ignore
-    mutationFn: ({ id, data }) => updateSensor(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
-});
+export const updateSensorMutation = () =>
+    createMutation({
+        mutationFn: ({ id, data }) => updateSensor(id, data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
+    });
 
-export const deleteSensorMutation = createMutation({
-    mutationFn: deleteSensor,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
-});
+export const deleteSensorMutation = () =>
+    createMutation({
+        mutationFn: deleteSensor,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sensors'] }),
+    });
+
