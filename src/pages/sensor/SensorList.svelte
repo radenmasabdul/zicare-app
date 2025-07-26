@@ -5,11 +5,16 @@
   import Filter from "../../components/Filter.svelte";
   import Pagination from "../../components/Pagination.svelte";
   import SearchBox from "../../components/SearchBox.svelte";
+  import Modal from "../../components/Modal.svelte";
+  import SensorForm from "./SensorForm.svelte";
 
   import { Eye, Edit, Trash2, Plus } from "@lucide/svelte";
 
   let search = "";
   let selectedLocation = "All";
+  let showModal = false;
+  let modalMode = "add";
+  let selectedSensor = {};
 
   let sensorData = [
     {
@@ -33,6 +38,116 @@
       recordAt: "2024-01-26 14:29:45",
       status: "warning",
       trend: "down",
+    },
+    {
+      id: 3,
+      no: 3,
+      location: "Warehouse - Zone C",
+      parameter: "CO2",
+      unit: "ppm",
+      value: 400,
+      recordAt: "2024-01-26 14:28:30",
+      status: "critical",
+      trend: "up",
+    },
+    {
+      id: 4,
+      no: 4,
+      location: "Building A - Floor 2",
+      parameter: "Temperature",
+      unit: "°C",
+      value: 26.1,
+      recordAt: "2024-01-26 14:27:10",
+      status: "normal",
+      trend: "up",
+    },
+    {
+      id: 5,
+      no: 5,
+      location: "Building B - Floor 2",
+      parameter: "Humidity",
+      unit: "%",
+      value: 55.8,
+      recordAt: "2024-01-26 14:25:00",
+      status: "normal",
+      trend: "down",
+    },
+    {
+      id: 6,
+      no: 6,
+      location: "Warehouse - Zone D",
+      parameter: "CO2",
+      unit: "ppm",
+      value: 800,
+      recordAt: "2024-01-26 14:23:20",
+      status: "warning",
+      trend: "up",
+    },
+    {
+      id: 7,
+      no: 7,
+      location: "Building A - Floor 3",
+      parameter: "Temperature",
+      unit: "°C",
+      value: 22.0,
+      recordAt: "2024-01-26 14:22:00",
+      status: "normal",
+      trend: "down",
+    },
+    {
+      id: 8,
+      no: 8,
+      location: "Building B - Floor 3",
+      parameter: "Humidity",
+      unit: "%",
+      value: 68.5,
+      recordAt: "2024-01-26 14:20:10",
+      status: "critical",
+      trend: "up",
+    },
+    {
+      id: 9,
+      no: 9,
+      location: "Warehouse - Zone E",
+      parameter: "CO2",
+      unit: "ppm",
+      value: 350,
+      recordAt: "2024-01-26 14:18:50",
+      status: "normal",
+      trend: "down",
+    },
+    {
+      id: 10,
+      no: 10,
+      location: "Building A - Floor 4",
+      parameter: "Temperature",
+      unit: "°C",
+      value: 27.3,
+      recordAt: "2024-01-26 14:17:05",
+      status: "warning",
+      trend: "up",
+    },
+    {
+      id: 11,
+      no: 11,
+      location: "Building B - Floor 4",
+      parameter: "Humidity",
+      unit: "%",
+      value: 60.0,
+      recordAt: "2024-01-26 14:15:30",
+      status: "normal",
+      trend: "down",
+    },
+    {
+      id: 12,
+      no: 12,
+      location: "Warehouse - Zone F",
+      parameter: "CO2",
+      unit: "ppm",
+      value: 950,
+      recordAt: "2024-01-26 14:14:10",
+      status: "critical",
+      trend: "up",
     },
   ];
 
@@ -67,6 +182,9 @@
 
   const handleAddSensor = () => {
     console.log("Add sensor clicked");
+    showModal = true;
+    modalMode = "add";
+    selectedSensor = {};
   };
 
   const handleExport = () => {
@@ -75,10 +193,16 @@
 
   const handleView = (sensor) => {
     console.log("View:", sensor.parameter);
+    showModal = true;
+    modalMode = "view";
+    selectedSensor = sensor;
   };
 
   const handleEdit = (sensor) => {
     console.log("Edit:", sensor.parameter);
+    showModal = true;
+    modalMode = "edit";
+    selectedSensor = sensor;
   };
 
   const handleDelete = (sensor) => {
@@ -124,6 +248,16 @@
     onNext={nextPage}
     onPrev={prevPage}
   />
+
+  <Modal
+    title="Sensor"
+    formId="sensorForm"
+    open={showModal}
+    mode={modalMode}
+    onClose={() => (showModal = false)}
+  >
+    <SensorForm mode={modalMode} sensor={selectedSensor} />
+  </Modal>
 </div>
 
 <style></style>
