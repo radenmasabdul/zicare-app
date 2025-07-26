@@ -1,21 +1,39 @@
 <script>
   import { Menu } from "@lucide/svelte";
   import { push } from "svelte-spa-router";
+  import { auth } from "../../stores/auth";
+  import Swal from "sweetalert2";
 
   export let toggleDrawer;
   let activeItem = "Profile";
 
   const navbarItems = ["Profile", "Settings", "Logout"];
 
+  let name = localStorage.getItem("name");
+
   const setActive = (item) => {
     activeItem = item;
 
     if (item === "Logout") {
-      // hapus token (kalau kamu pakai token login)
-      localStorage.removeItem("token");
-
-      // redirect ke login
-      push("/login");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your session.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, log me out",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("name");
+          auth.set({
+            token: null,
+            user: null,
+            isLoggedIn: false,
+          });
+          push("/login");
+        }
+      });
     }
   };
 </script>
@@ -32,7 +50,7 @@
 
   <div class="flex gap-2 items-center">
     <span class="hidden md:inline text-sm font-medium text-gray-700">
-      Hi, Abdul
+      Hi, {name}
     </span>
 
     <div class="dropdown dropdown-end">

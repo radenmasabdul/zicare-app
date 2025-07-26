@@ -1,31 +1,15 @@
 <script>
-  import { push } from "svelte-spa-router";
-
   import { Eye, EyeOff, Mail, Lock, LogIn } from "@lucide/svelte";
-  import wallpaper from "../../assets/bg.jpg";
+  import { useLogin } from "../../hooks/useLogin";
 
-  let email = "";
-  let password = "";
-  let showPassword = false;
-  let isLoading = false;
-
-  const togglePasswordVisibility = () => (showPassword = !showPassword);
-
-  const handleSubmit = (e) => {
-    console.log("klik login");
-    e.preventDefault();
-    isLoading = true;
-
-    // contoh validasi dummy
-    if (email === "abdul.tamsis@gmail.com" && password === "password") {
-      // simpan token atau status login jika diperlukan
-      push("/dashboard"); // redirect ke layout utama
-    } else {
-      alert("Email atau password salah");
-    }
-
-    isLoading = false;
-  };
+  const {
+    email,
+    password,
+    showPassword,
+    togglePasswordVisibility,
+    handleSubmit,
+    isLoading,
+  } = useLogin();
 </script>
 
 <div
@@ -56,9 +40,9 @@
               name="email"
               autocomplete="email"
               placeholder="Email"
-              bind:value={email}
               required
               class="w-full py-3 pl-10 pr-3 bg-white/5 placeholder-gray-400 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/5 focus:shadow-none"
+              bind:value={$email}
             />
           </div>
 
@@ -68,12 +52,12 @@
             />
 
             <input
-              type={showPassword ? "text" : "password"}
+              type={$showPassword ? "text" : "password"}
+              bind:value={$password}
               id="password"
               name="password"
               autocomplete="current-password"
               placeholder="Password"
-              bind:value={password}
               required
               class="w-full py-3 pl-10 pr-12 bg-white/5 placeholder-gray-400 rounded-lg border border-gray-600
            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/5 focus:shadow-none"
@@ -95,10 +79,10 @@
           <div class="card-actions">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={$isLoading}
               class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-semibold hover:scale-105 transition-all disabled:opacity-50 cursor-pointer"
             >
-              {#if isLoading}
+              {#if $isLoading}
                 <svg
                   class="animate-spin h-5 w-5 mx-auto"
                   viewBox="0 0 24 24"
