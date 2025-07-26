@@ -1,6 +1,7 @@
 <script>
   import { Eye, EyeOff, Mail, Lock, LogIn } from "@lucide/svelte";
   import { useLogin } from "../../hooks/useLogin";
+  import wallpaper from "../../assets/bg.jpg";
 
   const {
     email,
