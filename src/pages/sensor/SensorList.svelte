@@ -156,7 +156,7 @@
   ];
 
   let currentPage = 1;
-  let perPage = 5;
+  let perPage = 10;
 
   $: filtered = sensorData.filter(
     (s) =>
@@ -247,6 +247,7 @@
     {perPage}
     onNext={nextPage}
     onPrev={prevPage}
+    on:pageChange={(e) => (currentPage = e.detail)}
   />
 
   <Modal

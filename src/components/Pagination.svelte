@@ -1,14 +1,16 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   export let currentPage = 1;
   export let total = 0;
-  export let perPage = 5;
+  export let perPage = 10;
   export let onNext;
   export let onPrev;
 
+  const dispatch = createEventDispatcher();
   const totalPages = Math.ceil(total / perPage);
 
   const goToPage = (page) => {
-    if (page !== currentPage) currentPage = page;
+    dispatch("pageChange", page);
   };
 
   $: start = (currentPage - 1) * perPage + 1;
