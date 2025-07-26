@@ -2,13 +2,10 @@
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
   import Router from "svelte-spa-router";
-
   import Navbar from "../components/layout/Navbar.svelte";
   import Drawer from "../components/layout/Drawer.svelte";
   import Content from "../components/layout/Content.svelte";
-
   import layoutRoutes from "../routes/layoutRoutes";
-
   import { LayoutDashboard, Users, Activity, Settings } from "@lucide/svelte";
 
   const sidebarItems = [
@@ -19,22 +16,37 @@
   ];
 
   let isDrawerOpen = true;
+  let isAuthenticated = false;
+  let isChecking = true;
+
   const toggleDrawer = () => {
     isDrawerOpen = !isDrawerOpen;
   };
 
   onMount(() => {
-    // opsional: redirect ke login kalau belum login
-    const isLoggedIn = true; // nanti kamu bisa ganti ini dengan cek token
-    if (!isLoggedIn) push("/login");
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      isAuthenticated = true;
+    } else {
+      push("/login");
+    }
+
+    isChecking = false;
   });
 </script>
 
-<Drawer {sidebarItems} {isDrawerOpen} {toggleDrawer}>
-  <Navbar {toggleDrawer} />
-  <div class="bg-base-200 min-h-screen">
-    <Content>
-      <Router routes={layoutRoutes} />
-    </Content>
+{#if isChecking}
+  <div class="flex justify-center items-center h-screen">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
   </div>
-</Drawer>
+{:else if isAuthenticated}
+  <Drawer {sidebarItems} {isDrawerOpen}>
+    <Navbar {toggleDrawer} />
+    <div class="bg-base-200 min-h-screen">
+      <Content>
+        <Router routes={layoutRoutes} />
+      </Content>
+    </div>
+  </Drawer>
+{/if}
