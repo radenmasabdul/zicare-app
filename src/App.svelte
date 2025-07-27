@@ -1,9 +1,12 @@
 <script>
+  import { QueryClientProvider } from "@tanstack/svelte-query";
+  import { queryClient } from "./utils/helpers/queryClient.js";
+  import Router from "svelte-spa-router";
+  import routes from "./routes/router";
 </script>
 
-<main>
-  <h1 class="text-3xl font-bold underline text-red-600">Hello world!</h1>
-</main>
+<QueryClientProvider client={queryClient}>
+  <Router {routes} useHash={true} />
+</QueryClientProvider>
 
-<style>
-</style>
+<style></style>
