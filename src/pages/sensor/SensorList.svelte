@@ -111,7 +111,7 @@
 
   $: sensorDataFormatted = sensorData.map((item, index) => ({
     ...item,
-    no: index + 1,
+    no: (currentPage - 1) * perPage + index + 1,
     recordedAt: moment(item.recordedAt).format("YYYY-MM-DD"),
   }));
 </script>
