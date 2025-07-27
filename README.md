@@ -117,7 +117,7 @@ API eksternal digunakan, silakan hubungi author untuk informasi lebih lanjut.
 
 ## ☁️ Deployment
 ```
-Vercel : https://zicare-app.vercel.app/
+https://zicare-app.vercel.app/
 ```
 ## 📄 License
 Proyek ini dibuat untuk keperluan technical test. Bebas digunakan secara pribadi atau edukasi, tidak untuk komersial.
