@@ -4,7 +4,7 @@ export const getAllSensor = async (query) => {
     const res = await api.get("/sensor/all", {
         params: query,
     });
-    return res.data.data;
+    return res.data;
 }
 
 export const getLocationSensor = async () => {

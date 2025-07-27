@@ -1,29 +1,94 @@
 <script>
+  import { onMount, createEventDispatcher } from "svelte";
+  import Swal from "sweetalert2";
+  import {
+    createSensor,
+    updateSensor,
+    getLocationSensor,
+    getLocationParameter,
+  } from "../../utils/endpoints/sensor";
+
   export let mode = "add";
   export let sensor = {};
+  const dispatch = createEventDispatcher();
 
-  const handleSubmit = (e) => {
+  let parameterOptions = [];
+  let locationOptions = [];
+
+  let selectedLocation = "";
+  let selectedParameter = "";
+  let nilai = "";
+  let unit = "";
+  let recordedAt = "";
+
+  onMount(async () => {
+    parameterOptions = await getLocationParameter();
+    locationOptions = await getLocationSensor();
+
+    if (sensor && Object.keys(sensor).length > 0) {
+      const locObj = locationOptions.find(
+        (loc) => loc.name === sensor.location
+      );
+      selectedLocation = locObj ? locObj.id : "";
+
+      const paramObj = parameterOptions.find(
+        (p) => p.name === sensor.parameter
+      );
+      selectedParameter = paramObj ? paramObj.id : "";
+
+      nilai = sensor.value ?? "";
+      unit = sensor.unit ?? "";
+      recordedAt = sensor.recordedAt ? sensor.recordedAt.slice(0, 10) : "";
+    }
+  });
+
+  $: if (selectedParameter && parameterOptions.length > 0) {
+    const param = parameterOptions.find((p) => p.id == selectedParameter);
+    unit = param?.unit ?? "";
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+
+    if (!selectedLocation) {
+      Swal.fire("Error", "Lokasi harus dipilih.", "error");
+      return;
+    }
+    if (!selectedParameter) {
+      Swal.fire("Error", "Parameter harus dipilih.", "error");
+      return;
+    }
+    if (nilai === "" || isNaN(parseFloat(nilai))) {
+      Swal.fire("Error", "Nilai harus diisi dengan angka valid.", "error");
+      return;
+    }
+    if (!recordedAt) {
+      Swal.fire("Error", "Tanggal Recorded At harus diisi.", "error");
+      return;
+    }
+
+    let valueParsed = parseFloat(nilai);
+
+    const data = {
+      locationId: selectedLocation,
+      parameterId: selectedParameter,
+      value: valueParsed,
+      recordedAt: recordedAt,
+    };
+
+    try {
+      if (mode === "add") {
+        await createSensor(data);
+        Swal.fire("Berhasil", "Sensor berhasil ditambahkan", "success");
+      } else if (mode === "edit") {
+        await updateSensor(sensor.id, data);
+        Swal.fire("Berhasil", "Sensor berhasil diperbarui", "success");
+      }
+      dispatch("close");
+    } catch (err) {
+      Swal.fire("Error", "Gagal simpan sensor", "error");
+    }
   };
-
-  const parameterOptions = [
-    { name: "Temperature", unit: "°C" },
-    { name: "Humidity", unit: "%" },
-    { name: "CO2", unit: "ppm" },
-  ];
-
-  const locationOptions = [
-    "Building A - Floor 1",
-    "Building B - Floor 2",
-    "Warehouse - Zone C",
-  ];
-
-  let selectedLocation = sensor.location ?? "";
-  let selectedParameter = sensor.parameter ?? "";
-  let nilai = sensor.value ?? "";
-  let unit = sensor.unit ?? "";
-  let recordedAt = sensor.recordAt?.slice(0, 10) ?? "";
 </script>
 
 <form
@@ -40,11 +105,12 @@
       bind:value={selectedLocation}
       disabled={mode === "view"}
       id="location"
-      class="select select-bordered w-full border-purple-500 bg-white/10 text-black backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      class="select select-bordered w-full"
+      required
     >
-      <option disabled selected>Select Location</option>
+      <option disabled value="">Select Location</option>
       {#each locationOptions as loc}
-        <option value={loc}>{loc}</option>
+        <option value={loc.id}>{loc.name}</option>
       {/each}
     </select>
   </div>
@@ -57,11 +123,12 @@
       bind:value={selectedParameter}
       disabled={mode === "view"}
       id="parameter"
-      class="select select-bordered w-full border-purple-500 bg-white/10 text-black backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      class="select select-bordered w-full"
+      required
     >
-      <option disabled selected>Select Parameter</option>
+      <option disabled value="">Select Parameter</option>
       {#each parameterOptions as p}
-        <option value={p.name}>{p.name}</option>
+        <option value={p.id}>{p.name}</option>
       {/each}
     </select>
   </div>
@@ -74,9 +141,11 @@
       bind:value={nilai}
       disabled={mode === "view"}
       id="value"
-      type="text"
+      type="number"
       placeholder="Enter value"
-      class="input input-bordered w-full border-purple-500 bg-white/10 text-black backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      class="input input-bordered w-full"
+      required
+      step="any"
     />
   </div>
 
@@ -88,9 +157,9 @@
       bind:value={unit}
       id="unit"
       type="text"
-      readonly={mode === "view"}
-      class="input input-bordered w-full bg-gray-100 text-black"
+      readonly
       disabled
+      class="input input-bordered w-full bg-gray-100"
     />
   </div>
 
@@ -103,7 +172,8 @@
       disabled={mode === "view"}
       id="recordedAt"
       type="date"
-      class="input input-bordered w-full border-purple-500 bg-white/10 text-black backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      class="input input-bordered w-full"
+      required
     />
   </div>
 </form>
