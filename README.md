@@ -1,47 +1,123 @@
-# Svelte + Vite
+# 🌐 Zi.Care Fullstack Engineer Technical Test – Frontend Web Developer
 
-This template should help get you started developing with Svelte in Vite.
+Aplikasi ini merupakan implementasi frontend untuk kebutuhan **technical test** Fullstack Engineer Zi.Care. Dibangun menggunakan **Svelte**, aplikasi ini menangani proses CRUD (Create, Read, Update, Delete) untuk data sensor kualitas udara.
 
-## Recommended IDE Setup
+## 🚀 Tech Stack
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+| Teknologi               | Deskripsi                                                                 |
+|-------------------------|---------------------------------------------------------------------------|
+| 🧡 **Svelte**            | Framework JavaScript ringan untuk membangun SPA                          |
+| ⚡ **Vite**              | Build tool super cepat untuk development dan production                   |
+| 🎨 **DaisyUI + TailwindCSS** | Framework UI berbasis utility class untuk styling yang konsisten dan cepat |
+| 🧭 **Svelte SPA Router** | Routing client-side berbasis hash untuk navigasi halaman                  |
+| 🍭 **SweetAlert2**       | Notifikasi pop-up interaktif dan modern                                   |
+| 🕒 **Moment.js**         | Untuk formatting dan parsing tanggal                                      |
+| ⚙️ **Axios**             | HTTP client untuk komunikasi dengan API eksternal                         |
+| 🎨 **Lucide Icons**      | Icon SVG open-source yang mudah digunakan                                |
 
-## Need an official Svelte framework?
-
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
-
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `checkJs` in the JS template?**
-
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+## 📂 Struktur Proyek
 ```
+├── .vscode/ # Konfigurasi editor (opsional)
+├── auth/ # Folder otentikasi (jika ada)
+├── node_modules/ # Dependency project
+├── public/ # File statis publik
+├── src/ # Sumber utama aplikasi
+│ ├── assets/ # Gambar dan aset lainnya
+│ ├── components/ # Komponen UI global
+│ │ ├── layout/ # Komponen layout (Navbar, Drawer, dll)
+│ │ │ ├── Content.svelte
+│ │ │ ├── Drawer.svelte
+│ │ │ └── Navbar.svelte
+│ │ ├── Button.svelte
+│ │ ├── DataTable.svelte
+│ │ ├── Export.svelte
+│ │ ├── Filter.svelte
+│ │ ├── Modal.svelte
+│ │ ├── Pagination.svelte
+│ │ └── SearchBox.svelte
+│ ├── hooks/ # Custom hooks (mis. useLogin)
+│ │ └── useLogin.js
+│ ├── layouts/ # Layout utama aplikasi
+│ │ └── Layout.svelte
+│ ├── pages/ # Halaman aplikasi
+│ │ ├── auth/
+│ │ │ ├── Login.svelte
+│ │ │ └── LoginForm.svelte
+│ │ ├── dashboard/
+│ │ │ └── Dashboard.svelte
+│ │ ├── sensor/
+│ │ │ ├── SensorForm.svelte
+│ │ │ └── SensorList.svelte
+│ │ ├── settings/
+│ │ │ └── Setting.svelte
+│ │ └── user/
+│ │ └── UserList.svelte
+│ ├── routes/ # Konfigurasi routing
+│ │ ├── LayoutRoutes.js
+│ │ └── router.js
+│ ├── stores/ # State global (store Svelte)
+│ │ ├── auth.js
+│ │ ├── sensor.js
+│ │ └── user.js
+│ ├── styles/ # Styling global
+│ │ └── app.css
+│ ├── utils/ # Fungsi pembantu dan API client
+│ │ ├── endpoint/
+│ │ │ ├── auth.js
+│ │ │ ├── sensor.js
+│ │ │ └── user.js
+│ │ ├── helpers/
+│ │ │ └── queryClient.js
+│ │ └── services/
+│ │ └── api.js
+│ ├── App.svelte # Root komponen Svelte
+│ ├── main.js # Entry point aplikasi
+│ └── vite-env.d.ts # Tipe untuk environment Vite
+├── .env # Variabel environment
+├── .gitignore # Daftar file yang diabaikan Git
+├── index.html # HTML utama
+├── jsconfig.json # Konfigurasi path/module JS
+├── package-lock.json # Lock file NPM
+├── package.json # Metadata dan dependency project
+├── readme.md # Dokumentasi proyek
+├── svelte.config.js # Konfigurasi Svelte
+└── vite.config.js # Konfigurasi Vite
+```
+
+## 📌 Api Reference
+```
+API eksternal digunakan, silakan hubungi author untuk informasi lebih lanjut.
+```
+
+## 🛠️ Cara Menjalankan Proyek
+
+1. **Clone repository ini:**
+   ```bash
+   git clone https://github.com/radenmasabdul/zicare-app.git
+   cd zicare-app
+   ```
+
+2. **Install dependency:**
+   ```bash
+   npm install
+   ```
+
+3. **Buat file .env :**
+   ```
+   bisa hubungi pemilik
+   ```
+
+4. **Jalankan proyek di mode development:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Buka aplikasi di browser:**
+   Kunjungi [http://localhost:5173](http://localhost:5173)
+
+## ☁️ Deployment
+```
+Vercel : https://zicare-app.vercel.app/
+```
+## 📄 License
+Proyek ini dibuat untuk keperluan technical test. Bebas digunakan secara pribadi atau edukasi, tidak untuk komersial.
